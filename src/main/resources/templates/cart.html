@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Giỏ hàng</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+  <link rel="stylesheet" href="fonts/icomoon/style.css">
+
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/magnific-popup.css">
+  <link rel="stylesheet" href="css/jquery-ui.css">
+  <link rel="stylesheet" href="css/owl.carousel.min.css">
+  <link rel="stylesheet" href="css/owl.theme.default.min.css">
+
+
+  <link rel="stylesheet" href="css/aos.css">
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <!-- Google Fonts Roboto -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
+  <!-- MDB -->
+  <link rel="stylesheet" href="css/mdb.min.css" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+
+</head>
+
+<body>
+
+  <div class="site-wrap">
+    <!-- Include the header fragment -->
+    <div th:replace="~{layout/header :: header}"></div>
+
+    <div class="bg-light py-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 mb-0"><a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong
+              class="text-black">Cart</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section">
+      <div class="container">
+        <div class="row mb-5">
+          <form class="col-md-12" method="post">
+            <div class="site-blocks-table">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th class="product-thumbnail">Hình ảnh</th>
+                    <th class="product-name">Sản phẩm</th>
+                    <th class="product-price">Đơn giá</th>
+                    <th class="product-quantity">Số lượng</th>
+                    <th class="product-total">Tổng</th>
+                    <th class="product-remove">Xóa</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="product-row" th:each="entry : ${cart.getCartItems().entrySet()}"
+                    th:data-product-id="${entry.value.getId}">
+                    <td class="product-thumbnail">
+                      <img th:src="@{/img/product/__${entry.value.getId}__/__${entry.value.getImage}__}" alt="Image"
+                        class="img-fluid">
+                    </td>
+                    <td class="product-name">
+                      <h2 th:text="${entry.value.getName()}" class="h5 text-black"></h2>
+                    </td>
+                    <td th:text="${#numbers.formatDecimal(entry.value.getPrice(), 0, 'COMMA', 0, 'POINT')} + ' ₫'">
+                    </td>
+                    <td>
+                      <div class="input-group mb-3" style="max-width: 170px;">
+                        <div class="input-group-prepend">
+                          <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
+                        </div>
+                        <input type="text" class="form-control text-center quantity-input"
+                          th:value="${entry.value.getQuantity}"
+                          th:max="${productMap.get(entry.value.getId).getQuantity}" placeholder=""
+                          aria-label="Example text with button addon" aria-describedby="button-addon1">
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
+                        </div>
+                      </div>
+                    </td>
+                    <td
+                      th:text="${#numbers.formatDecimal(entry.value.getPrice() * entry.value.getQuantity(), 0, 'COMMA', 0, 'POINT') + ' ₫'}">
+                    </td>
+                    <td>
+                      <a th:href="@{/cart/delete/__${entry.value.getId}__}" class="btn btn-primary btn-sm">X</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </form>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row mb-5">
+              <div class="col-md-6 mb-3 mb-md-0">
+                <button class="btn btn-primary btn-sm btn-block" id="cart-update">Cập nhật giỏ hàng</button>
+              </div>
+              <div class="col-md-6">
+                <button class="btn btn-outline-primary btn-sm btn-block">Tiếp tục mua sắm</button>
+              </div>
+            </div>
+            <!-- <div class="row">
+              <div class="col-md-12">
+                <label class="text-black h4" for="coupon">Mã giảm giá</label>
+                <p>Nếu bạn có phiếu giảm giá hãy nhập ở đây</p>
+              </div>
+              <div class="col-md-8 mb-3 mb-md-0">
+                <input type="text" class="form-control py-3" id="coupon" placeholder="Coupon Code">
+              </div>
+              <div class="col-md-4">
+                <button class="btn btn-primary btn-sm">Apply Coupon</button>
+              </div>
+            </div> -->
+          </div>
+          <div class="col-md-6 pl-5">
+            <div class="row justify-content-end">
+              <div class="col-md-7">
+                <div class="row">
+                  <div class="col-md-12 text-right border-bottom mb-5">
+                    <h3 class="text-black h4 text-uppercase">Tổng tiền thanh toán</h3>
+                  </div>
+                </div>
+                <div class="row mb-5">
+                  <div class="col-md-6">
+                    <span class="text-black">Tổng cộng</span>
+                  </div>
+                  <div class="col-md-6 text-right">
+                    <strong
+                      th:text="${#numbers.formatDecimal(cart.calculateTotalPrice(), 0, 'COMMA', 0, 'POINT') + ' ₫'}"
+                      class="text-black">0 ₫</strong>
+                  </div>
+                </div>
+                <div class="row mb-5">
+                  <div class="col-md-6">
+                    <span class="text-black">Giảm giá</span>
+                  </div>
+                  <div class="col-md-6 text-right">
+                    <strong
+                      th:text="${#numbers.formatDecimal(cart.calculateDiscountPrice(cart.calculateTotalPrice()), 0, 'COMMA', 0, 'POINT') + ' ₫'}"
+                      class="text-black">0 ₫</strong>
+                  </div>
+                </div>
+                <div class="row mb-5">
+                  <div class="col-md-6">
+                    <span class="text-black">Thành tiền</span>git
+                  </div>
+                  <div class="col-md-6 text-right">
+                    <strong
+                      th:text="${#numbers.formatDecimal(cart.calculateTotalPrice() - cart.calculateDiscountPrice(cart.calculateTotalPrice()), 0, 'COMMA', 0, 'POINT') + ' ₫'}"
+                      class="text-black">0 ₫</strong>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <button id="cart-pay" class="btn btn-primary btn-lg py-3 btn-block" data-toggle="modal"
+                      data-target="#dathang">Tiến
+                      hành thanh toán</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Include the footer fragment -->
+
+    <div th:replace="~{layout/footer :: footer}"></div>
+  </div>
+  <!-- Nhúng file modals.html -->
+  <div th:replace="~{layout/modals}"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+  <!-- MDB -->
+  <script type="text/javascript" src="../js/mdb.min.js"></script>
+
+  <script src="../js/jquery-3.3.1.min.js"></script>
+  <script src="../js/jquery-ui.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/owl.carousel.min.js"></script>
+  <script src="../js/jquery.magnific-popup.min.js"></script>
+  <script src="../js/aos.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/user/auth.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      $("#btn-checkout-confirmed").click(function () {
+        const name = $("#name").val();
+        const phone = $("#phone").val();
+        const streetname = $("#streetname").val();
+        const city = $("#city").val();
+        const district = $("#district").val();
+        const ward = $("#ward").val();
+
+        const data = {
+          name: name,
+          phone: phone,
+          address: streetname + ', ' + ward + ', ' + district + ', ' + city
+        };
+        console.error(data);
+        // Gửi yêu cầu POST đến server bằng Fetch API
+        fetch("/cart/checkout", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        })
+          .then(response => response.json())
+          .then(data => {
+            // Xử lý kết quả từ server bằng jQuery (nếu cần)
+            if (data.code === 0) {
+              Swal.fire("Thành Công", data.message, "success");
+              setTimeout(function () {
+                location.href = "/cart/check";
+              }, 1500);
+            } else {
+              Swal.fire("Thất Bại", data.message, "error");
+            }
+            console.log(data);
+          })
+          .catch(error => {
+            console.error("Lỗi khi gửi yêu cầu:", error);
+          });
+      });
+
+    });
+
+  </script>
+
+  <script th:inline="javascript">
+    $('#cart-update').click(e => {
+      var cartProducts = [];
+
+      var rows = document.querySelectorAll('.product-row');
+      rows.forEach(function (row) {
+        var productId = row.getAttribute('data-product-id');
+        var productQuantity = row.querySelector('.quantity-input').value;
+
+        cartProducts.push({
+          id: productId,
+          // name: "",
+          quantity: productQuantity,
+          // description: "",
+          // price: "",
+          // image: ""
+        });
+      });
+
+      var cartProductsJson = JSON.stringify(cartProducts);
+      console.log(cartProducts);
+
+      var url = '/cart/update';
+
+      var requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: cartProductsJson
+      };
+
+      fetch(url, requestOptions)
+        .then(response => response.json())
+        .then(data => {
+          if (data.code === 0) {
+            location.href = "";
+          }
+          console.log(data);
+        })
+        .catch(error => {
+          // Xử lý lỗi (nếu có)
+          console.error('Error:', error);
+        });
+    })
+
+
+
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+  <script>
+    var citis = document.getElementById("city");
+    var districts = document.getElementById("district");
+    var wards = document.getElementById("ward");
+    var Parameter = {
+      url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
+      method: "GET",
+      responseType: "application/json",
+    };
+    var promise = axios(Parameter);
+    promise.then(function (result) {
+      renderCity(result.data);
+    });
+
+    function renderCity(data) {
+      for (const x of data) {
+        citis.options[citis.options.length] = new Option(x.Name, x.Name);
+      }
+      citis.onchange = function () {
+        district.length = 1;
+        ward.length = 1;
+        if (this.value != "") {
+          const result = data.filter(n => n.Name === this.value);
+
+          for (const k of result[0].Districts) {
+            district.options[district.options.length] = new Option(k.Name, k.Name);
+          }
+        }
+      };
+      district.onchange = function () {
+        ward.length = 1;
+        const dataCity = data.filter((n) => n.Name === citis.value);
+        if (this.value != "") {
+          const dataWards = dataCity[0].Districts.filter(n => n.Name === this.value)[0].Wards;
+
+          for (const w of dataWards) {
+            wards.options[wards.options.length] = new Option(w.Name, w.Name);
+          }
+        }
+      };
+    }
+  </script>
+
+  <script>
+    const form = document.getElementById("checkout-form");
+
+    // Function to check the input data
+    function checkInput() {
+      // Check if the name input is empty
+      const name = document.getElementById("name").value;
+      if (name === "") {
+        alert("Vui lòng nhập tên người nhận.");
+        return false;
+      }
+
+      // Check if the phone number is empty or not 11 digits long
+      const phone = document.getElementById("phone").value;
+      if (phone === "" || phone.length !== 10) {
+        alert("Vui lòng nhập số điện thoại 10 số.");
+        return false;
+      }
+
+      // Check if the street name input is empty
+      const streetname = document.getElementById("streetname").value;
+      if (streetname === "") {
+        alert("Vui lòng nhập tên đường, tòa nhà, số nhà.");
+        return false;
+      }
+
+      // Check if the city input is selected
+      const city = document.getElementById("city").value;
+      if (city === "") {
+        alert("Vui lòng chọn tỉnh thành.");
+        return false;
+      }
+
+      // Check if the district input is selected
+      const district = document.getElementById("district").value;
+      if (district === "") {
+        alert("Vui lòng chọn quận huyện.");
+        return false;
+      }
+
+      // Check if the ward input is selected
+      const ward = document.getElementById("ward").value;
+      if (ward === "") {
+        alert("Vui lòng chọn phường xã.");
+        return false;
+      }
+
+      // All input data is valid
+      return true;
+    }
+
+    // Add event listener to the form
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      // Check the input data
+      const isValid = checkInput();
+
+      if (!isValid) {
+        return;
+      }
+
+      // Submit the form
+      form.submit();
+    });
+  </script>
+
+</body>
+
+</html>

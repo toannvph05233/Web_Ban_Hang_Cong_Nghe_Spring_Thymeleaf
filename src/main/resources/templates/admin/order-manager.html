@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Quản lý đơn hàng</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+    
+    <style>
+        .table-container {
+            max-height: 580px;
+            overflow-y: auto;
+        }
+
+        .table-container thead {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .scrolling-text {
+            white-space: nowrap;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .scrolling-text h3 {
+            animation: scrolling 10s linear infinite;
+        }
+
+        @keyframes scrolling {
+            0% {
+                transform: translateX(100%);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+        
+    </style>
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <div id="header" th:replace="~{admin/layout/header :: header}"></div>
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <div id="nav" th:replace="~{admin/layout/nav :: nav}"></div>
+
+                <div class="container-fluid">
+                    <div class="card shadow mb-4">
+                        <div class="card shadow">
+
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="scrolling-text">
+                                            <h3>Quản lý đơn hàng</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive table-container">
+                                <table class="table table-striped">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Người đặt</th>
+                                            <th>Địa chỉ</th>
+                                            <th>Tạo lúc</th>
+                                            <th>Phone</th>
+                                            <th>Trạng thái</th>
+                                            <th>Tổng tiền</th>
+                                            <th>Hình thức</th>
+                                            <th>Hoạt động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-bordered">
+                                        <tr th:each="order : ${orders}" th:id="${order.id}">
+                                            <td><a th:text="${order.id} + ' (Xem chi tiết)'"
+                                                    th:href="@{/admin/order-detail/__${order.id}__}"></a></td>
+                                            <td th:text="${order.userId.name}"></td>
+                                            <td th:text="${order.address}"></td>
+                                            <td th:text="${order.create_at}"></td>
+                                            <td th:text="${order.phone}"></td>
+                                            <td><span th:class="@{badge __${order.getStatusColor}__}" th:text="${order.status}">Success</span></td>
+                                            <td
+                                                th:text="${#numbers.formatDecimal(order.total, 0, 'COMMA', 0, 'POINT')} + ' ₫'">
+                                            </td>
+                                            <td th:text="${order.payment_method}"></td>
+                                            <td>
+                                                <button th:if="${order.status} == 'Đang chờ'" class="btn btn-sm btn-outline-success btn-accept"
+                                                    th:data-id="${order.id}">Nhận</button>
+                                                <button th:unless="${order.status == 'Đã hủy' or order.status == 'Đã giao'}" class="btn btn-sm btn-outline-danger btn-cancel" th:data-id="${order.id}">Hủy</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <p>Tổng đơn hàng: <strong class="text-danger" id="total"
+                                    th:text="${#lists.size(orders)}"></strong></p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <!-- <div id="footer" th:replace="~{admin/layout/footer :: footer}"></div> -->
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Confirm add -->
+    <div id="confirm-add-dialog" class="modal fade">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Thêm sản phẩm</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form enctype="multipart/form-data" id="add-product-form">
+                        <div class="form-group">
+                            <label for="add-category">Thuộc loại</label>
+                            <select id="add-category" name="category_id" class="form-control">
+                                <!-- <option disabled selected>Chọn loại</option> -->
+                                <option th:each="category : ${categories}" th:value="${category.id}"
+                                    th:text="${category.name}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="add-name">Tên sản phẩm</label>
+                            <input class="form-control" type="text" placeholder="Vui lòng điền tên sản phẩm" name="name"
+                                id="add-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="add-desc">Mô tả</label>
+                            <textarea class="form-control" id="add-desc" name="description" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="add-price">Giá</label>
+                            <input class="form-control" type="number" placeholder="Vui lòng điền giá sản phẩm"
+                                name="price" id="add-price">
+                        </div>
+                        <div class="form-group">
+                            <label for="add-price">Hình ảnh</label>
+                            <input type="file" class="form-control-file" id="add-image" name="image">
+                        </div>
+                        <div class="form-group">
+                            <label for="add-quantity">Số lượng</label>
+                            <input class="form-control" type="number" placeholder="Vui lòng điền số lượng sản phẩm"
+                                name="quantity" id="add-quantity">
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button data-id="???" type="button" id="btn-add-confirmed"
+                                class="btn btn-primary">Thêm</button>
+                            <button type="button" class="btn btn-dark" data-dismiss="modal">Đóng</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Confirm add -->
+
+    <!-- Confirm delete -->
+    <div id="confirm-delete-dialog" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Xóa sản phẩm</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Bạn có chắc chắn muốn xóa <strong id="delete-username"></strong>
+                </div>
+
+                <!-- Modal footer -->
+
+                <div class="modal-footer">
+                    <button data-id="???" id="btn-delete-confirmed" type="button" class="btn btn-danger">Xóa</button>
+                    <button type="button" class="btn btn-dark" data-dismiss="modal">Đóng</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- End Confirm delete -->
+
+    <!-- Update user -->
+    <div id="confirm-edit-dialog" class="modal fade">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Cập nhật sản phẩm</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form enctype="multipart/form-data" id="edit-product-form">
+                        <div class="form-group">
+                            <label for="edit-category">Thuộc loại</label>
+                            <select id="edit-category" name="category_id" class="form-control">
+                                <option th:each="category : ${categories}" th:value="${category.id}"
+                                    th:text="${category.name}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-id">ID</label>
+                            <input class="form-control" type="text" name="id" readonly id="edit-id">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-name">Tên sản phẩm</label>
+                            <input class="form-control" type="text" placeholder="Vui lòng điền tên sản phẩm" name="name"
+                                id="edit-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-desc">Mô tả</label>
+                            <textarea class="form-control" id="edit-description" name="description" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-price">Giá</label>
+                            <input class="form-control" type="number" placeholder="Vui lòng điền giá sản phẩm"
+                                name="price" id="edit-price">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-price">Hình ảnh</label>
+                            <input type="file" class="form-control-file" id="edit-image" name="image">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-quantity">Số lượng</label>
+                            <input class="form-control" type="number" placeholder="Vui lòng điền số lượng sản phẩm"
+                                name="quantity" id="edit-quantity">
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button data-id="???" type="button" id="btn-edit-confirmed" class="btn btn-primary">Cập
+                        nhật</button>
+                    <button type="button" class="btn btn-dark" data-dismiss="modal">Đóng</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <!-- End Update user -->
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="../js/sb-admin-2.min.js"></script>
+    <script src="../js/admin/main.js"></script>
+
+    <!-- JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+
+    <script type="text/javascript">
+        function myFunction(id, status) {
+            let data = {
+                id: id,
+                status: status
+            }
+            Swal.showLoading()
+            fetch('/order', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(res => res.json())
+                .then(json => {
+                    Swal.hideLoading();
+                    console.log('client', json);
+                    if (json.code === 0) {
+                        Swal.fire("Thành Công", json.message, "success");
+                        setTimeout(function () {
+                            location.href = "";
+                        }, 2000);
+                    } else {
+                        console.log('client', json)
+                        Swal.fire("Thất Bại", json.message, "error");
+                    }
+                })
+                .catch(console.log)
+        }
+
+        $('.btn-accept').click(e => {
+            let btn = e.target
+            let id = btn.dataset.id
+            myFunction(id, 'Đang giao');
+
+        })
+
+        $('.btn-cancel').click(e => {
+            let btn = e.target
+            let id = btn.dataset.id
+            myFunction(id, 'Đã hủy');
+
+        })
+
+    </script>
+</body>
+
+</html>

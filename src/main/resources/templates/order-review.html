@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Đánh giá</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+    <link rel="stylesheet" href="/fonts/icomoon/style.css">
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/magnific-popup.css">
+    <link rel="stylesheet" href="/css/jquery-ui.css">
+    <link rel="stylesheet" href="/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="/css/owl.theme.default.min.css">
+
+
+    <link rel="stylesheet" href="/css/aos.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
+    <!-- MDB -->
+    <link rel="stylesheet" href="/css/mdb.min.css" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+    <style>
+        .rating .star {
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .rating .star:before {
+            content: "\2606";
+            font-size: 30px;
+            color: #ccc;
+        }
+
+        .rating .star:hover:before,
+        .rating .star.selected:before {
+            content: "\2605";
+            color: gold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="site-wrap">
+        <!-- Include the header fragment -->
+        <div th:replace="~{layout/header :: header}"></div>
+
+        <div class="bg-light py-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 mb-0"><a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong
+                            class="text-black">Đánh giá đơn hàng</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container rounded bg-light">
+
+            <div class="container">
+                <h1>Đánh giá sản phẩm</h1>
+                <form>
+                    <div class="form-group">
+                        <label>Đánh giá:</label>
+                        <div class="rating">
+                            <span class="star"></span>
+                            <span class="star"></span>
+                            <span class="star"></span>
+                            <span class="star"></span>
+                            <span class="star"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="review">Đánh giá chi tiết:</label>
+                        <textarea class="form-control" id="review" rows="4"
+                            placeholder="Viết đánh giá của bạn"></textarea>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-review">Gửi đánh giá</button>
+                </form>
+            </div>
+
+        </div>
+
+
+
+        <!-- Include the footer fragment -->
+        <div th:replace="~{layout/footer :: footer}"></div>
+    </div>
+    <!-- Nhúng file modals.html -->
+    <div th:replace="~{layout/modals}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+    <!-- MDB -->
+    <script type="text/javascript" src="/js/mdb.min.js"></script>
+
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/jquery-ui.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/owl.carousel.min.js"></script>
+    <script src="/js/jquery.magnific-popup.min.js"></script>
+    <script src="/js/aos.js"></script>
+
+    <script src="/js/main.js"></script>
+
+
+    <script src="/js/user/auth.js"></script>
+
+    <Script>
+        var sosao = 1;
+        $(document).ready(function () {
+            $(".rating .star").click(function () {
+                $(this).parent().find(".star").removeClass("selected");
+                $(this).addClass("selected");
+                $(this).prevAll(".star").addClass("selected");
+                $(this).nextAll(".star").removeClass("selected");
+
+                var rating = $(this).prevAll(".star").length + 1;
+                sosao = rating;
+
+            });
+        });
+
+        $('.btn-review').click(e => {
+
+            var fullUrl = window.location.href;
+            var reviewTextarea = document.getElementById("review");
+            var reviewContent = reviewTextarea.value;
+
+            var formData = new URLSearchParams();
+            formData.append('rating', sosao);
+            formData.append('comment', reviewContent);
+
+            fetch(fullUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formData,
+            })
+                .then(res => res.json())
+                .then(json => {
+                    console.log('client', json);
+                    if (json.code === 0) {
+                        Swal.fire("Thành Công", json.message, "success");
+                        setTimeout(function () {
+                            location.href = "/";
+                        }, 1000);
+                    } else {
+                        console.log('client', json)
+                        Swal.fire("Thất Bại", json.message, "error");
+                    }
+                })
+                .catch(console.log)
+        })
+
+
+    </Script>
+
+</body>
+
+</html>

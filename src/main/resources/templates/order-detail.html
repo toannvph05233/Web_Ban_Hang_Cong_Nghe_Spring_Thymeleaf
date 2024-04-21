@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Chi tiết đơn hàng</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+    <link rel="stylesheet" href="/fonts/icomoon/style.css">
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/magnific-popup.css">
+    <link rel="stylesheet" href="/css/jquery-ui.css">
+    <link rel="stylesheet" href="/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="/css/owl.theme.default.min.css">
+
+
+    <link rel="stylesheet" href="/css/aos.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
+    <!-- MDB -->
+    <link rel="stylesheet" href="/css/mdb.min.css" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+
+</head>
+
+<body>
+    <div class="site-wrap">
+        <!-- Include the header fragment -->
+        <div th:replace="~{layout/header :: header}"></div>
+
+        <div class="bg-light py-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 mb-0"><a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong
+                            class="text-black">Chi tiết đơn hàng đã đặt</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container rounded bg-light">
+            <div class="row mb-5">
+                <form class="col-md-12" method="post">
+                    <div class="site-blocks-table">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="product-thumbnail">Hình ảnh</th>
+                                    <th class="product-name">Sản phẩm</th>
+                                    <th class="product-price">Đơn giá</th>
+                                    <th class="product-quantity">Số lượng</th>
+                                    <th class="product-total">Tổng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="product-row" th:each="item : ${orderItems}"
+                                    th:data-product-id="${item.product.id}">
+                                    <td class="product-thumbnail">
+                                        <img th:src="@{/img/product/__${item.product.id}__/__${item.product.image}__}"
+                                            alt="Image" class="img-fluid">
+                                    </td>
+                                    <td class="product-name">
+                                        <h2 th:text="${item.product.name}" class="h5 text-black"></h2>
+                                    </td>
+                                    <td
+                                        th:text="${#numbers.formatDecimal(item.purchase_price, 0, 'COMMA', 0, 'POINT')} + ' ₫'">
+                                    </td>
+                                    <td th:text="${item.quantity}">
+                                    </td>
+                                    <td
+                                        th:text="${#numbers.formatDecimal(item.purchase_price * item.quantity, 0, 'COMMA', 0, 'POINT') + ' ₫'}">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+            <div class="row">
+                <div class="col-md-12 pl-5">
+                    <div class="row justify-content-end">
+                        <div class="col-md-3">
+                            <div class="row">
+                                <div class="col-md-12 text-right border-bottom mb-5">
+                                    <h3 class="text-black h4 text-uppercase">Tổng tiền thanh toán</h3>
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-md-6">
+                                    <span class="text-black">Tổng cộng</span>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <strong
+                                        th:text="${#numbers.formatDecimal(order.total, 0, 'COMMA', 0, 'POINT') + ' ₫'}"
+                                        class="text-black">0 ₫</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Include the footer fragment -->
+        <div th:replace="~{layout/footer :: footer}"></div>
+    </div>
+    <!-- Nhúng file modals.html -->
+    <div th:replace="~{layout/modals}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+    <!-- MDB -->
+    <script type="text/javascript" src="/js/mdb.min.js"></script>
+
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/jquery-ui.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/owl.carousel.min.js"></script>
+    <script src="/js/jquery.magnific-popup.min.js"></script>
+    <script src="/js/aos.js"></script>
+
+    <script src="/js/main.js"></script>
+
+
+    <script src="/js/user/auth.js"></script>
+</body>
+
+</html>

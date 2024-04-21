@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Trang chủ</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+    <link rel="stylesheet" href="fonts/icomoon/style.css">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/jquery-ui.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+
+
+    <link rel="stylesheet" href="css/aos.css">
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
+    <!-- MDB -->
+    <link rel="stylesheet" href="css/mdb.min.css" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+
+    <style>
+        /* styles.css */
+        /* .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.product {
+    position: relative;
+    overflow: hidden;
+}
+
+.product img {
+    max-width: 100%;
+    height: auto;
+} */
+
+        .add-to-cart {
+            /* position: absolute; */
+            /* bottom: 0; */
+            /* left: 50%; */
+            /* transform: translateX(-50%); */
+            /* padding: 8px 16px; */
+            /* background-color: #007bff; */
+            /* color: #fff; */
+            /* border: none; */
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .product:hover .add-to-cart {
+            opacity: 1;
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+    <div class="site-wrap">
+
+        <!-- Include the header fragment -->
+        <div th:replace="~{layout/header :: header}"></div>
+
+        <div class="site-blocks-cover" style="background-image: url(img/iphone12.png);" data-aos="fade">
+            <div class="container">
+                <div class="row align-items-start align-items-md-center justify-content-end">
+                    <div class="col-md-5 text-center text-md-left pt-5 pt-md-0">
+                        <h1 class="mb-2">Tìm Sản Phẩm Yêu Thích Của Bạn</h1>
+                        <div class="intro-text text-center text-md-left">
+                            <p class="mb-4">Hãy tìm kiếm những sản phẩm mà bạn muốn</p>
+                            <p>
+                                <a href="#" class="btn btn-sm btn-primary">Shop Now</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="site-section site-section-sm site-blocks-1">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4" data-aos="fade-up" data-aos-delay="">
+                        <div class="icon mr-4 align-self-start">
+                            <span class="icon-truck"></span>
+                        </div>
+                        <div class="text">
+                            <h2 class="text-uppercase">Free Shipping</h2>
+                            <p>Giao hàng miễn phí toàn quốc</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4" data-aos="fade-up" data-aos-delay="100">
+                        <div class="icon mr-4 align-self-start">
+                            <span class="icon-refresh2"></span>
+                        </div>
+                        <div class="text">
+                            <h2 class="text-uppercase">Free Returns</h2>
+                            <p>Bảo hành và đổi hàng 1-1 nếu có lỗi</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4" data-aos="fade-up" data-aos-delay="200">
+                        <div class="icon mr-4 align-self-start">
+                            <span class="icon-help"></span>
+                        </div>
+                        <div class="text">
+                            <h2 class="text-uppercase">Customer Support</h2>
+                            <p>Hỡ trợ giải đáp khách hàng 24/7</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="site-section site-blocks-2">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade" data-aos-delay="">
+                        <a class="block-2-item" href="#">
+                            <figure class="image">
+                                <img src="img/iPhone.jpg" alt="" class="img-fluid">
+                            </figure>
+                            <div class="text">
+                                <span class="text-uppercase">Collections</span>
+                                <h3>Điện thoại</h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
+                        <a class="block-2-item" href="#">
+                            <figure class="image">
+                                <img src="img/laptop.jpg" alt="" class="img-fluid">
+                            </figure>
+                            <div class="text">
+                                <span class="text-uppercase">Collections</span>
+                                <h3>Laptop</h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="200">
+                        <a class="block-2-item" href="#">
+                            <figure class="image">
+                                <img src="img/watch.jpg" alt="" class="img-fluid">
+                            </figure>
+                            <div class="text">
+                                <span class="text-uppercase">Collections</span>
+                                <h3>Đồng hồ thông minh</h3>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="site-section block-3 site-blocks-2 bg-light">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-7 site-section-heading text-center pt-4">
+                        <h2 th:text="'Tổng sản phẩm đang bán: ' + ${#lists.size(session.products)}"></h2>
+                    </div>
+                </div>
+                <form class="form-row" method="post">
+                    <div class="form-group col-md-3">
+                        <label for="color">Màu sắc:</label>
+                        <select class="form-control" id="color" name="color">
+                            <option value="">Tất cả</option>
+                            <option th:each="color : ${session.colors}" th:value="${color.name}" th:text="${color.name}">
+                                apple</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label for="priceRange">Khoảng giá:</label>
+                        <select class="form-control" id="priceRange" name="priceRange">
+                            <option value="">Tất cả</option>
+                            <option value="0-1000000">Dưới 1 triệu</option>
+                            <option value="1000000-5000000">Từ 1 triệu đến 5 triệu</option>
+                            <option value="5000000-10000000">Từ 5 triệu đến 10 triệu</option>
+                            <option value="10000000-989898980">Từ 10 triệu trở lên</option>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group col-md-3">
+                        <label for="category">Loại sản phẩm:</label>
+                        <select class="form-control" id="category" name="category">
+                            <option value="">Tất cả</option>
+                            <option th:each="category : ${session.categories}" th:value="${category.id}"
+                                th:text="${category.name}"></option>
+                            <!-- Thêm các tùy chọn loại sản phẩm khác -->
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label for="color">Hãng:</label>
+                        <select class="form-control" id="brand" name="brand">
+                            <option value="">Tất cả</option>
+                            <option th:each="brand : ${session.brands}" th:value="${brand.name}" th:text="${brand.name}">
+                                apple</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                </form>
+                <hr class="hr" />
+                <div class="row">
+                    <div th:each="product : ${session.products}" class="col-md-3 product-item product">
+                        <div class="card mb-4 product-grid">
+                            <a th:href="@{/product-detail/__${product.id}__}">
+                                <div class="card-img" style="height: 306px;"><img data-toggle="tooltip"
+                                        th:title="${product.name}"
+                                        style="padding-top: 50px; padding-left: 25px; padding-right: 25px;"
+                                        th:src="@{/img/product/__${product.id}__/__${product.image}__}"
+                                        class="card-img-top" alt="Product Image"></div>
+                            </a>
+                            <div class="card-body text-center">
+                                <a th:href="@{/product-detail/__${product.id}__}">
+                                    <h5 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                        data-toggle="tooltip" th:title="${product.name}" th:text="${product.name}"></h5>
+                                </a>
+
+                                <p class="mb-0" th:text="@{Còn __${product.quantity}__ sản phẩm}"></p>
+                                <p th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' ₫'"
+                                    class="text-danger font-weight-bold"></p>
+                                <button class="btn btn-success btn-lg add-to-cart btn-add-cart"
+                                    th:data-id="${product.id}">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Display Bootstrap pagination -->
+                <!-- <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li th:class="${products.first} ? 'page-item disabled' : 'page-item'">
+                            <a class="page-link"
+                                th:href="@{/(page=${products.number }, size=${products.size})}">Previous</a>
+                        </li>
+                        <li th:each="pageNumber : ${#numbers.sequence(0, products.totalPages - 1)}"
+                            th:class="${pageNumber == products.number} ? 'page-item active' : 'page-item'">
+                            <a class="page-link" th:href="@{/(page=${pageNumber + 1}, size=${products.size})}"
+                                th:text="${pageNumber + 1}"></a>
+                        </li>
+                        <li th:class="${products.last} ? 'page-item disabled' : 'page-item'">
+                            <a class="page-link"
+                                th:href="@{/(page=${products.number + 2}, size=${products.size})}">Next</a>
+                        </li>
+                    </ul>
+                </nav> -->
+            </div>
+        </div>
+
+
+
+        <!-- <div class="site-section block-8">
+            <div class="container">
+                <div class="row justify-content-center  mb-5">
+                    <div class="col-md-7 site-section-heading text-center pt-4">
+                        <h2>Big Sale!</h2>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <div class="col-md-12 col-lg-7 mb-5">
+                        <a href="#"><img src="img/Landing-page-Dat-diem-cao-Sale-Bao-Khung-01.png"
+                                alt="Image placeholder" class="img-fluid rounded"></a>
+                    </div>
+                    <div class="col-md-12 col-lg-5 text-center pl-md-5">
+                        <h2><a href="#">Giảm 50% tất cả các mặt hàng</a></h2>
+                        <p class="post-meta mb-4">By <a href="#">Biênz</a> <span class="block-8-sep">&bullet;</span>
+                            August 3, 2023</p>
+                        <p>Tranh thủ mua hàng nào các bạn ơi</p>
+                        <p><a href="#" class="btn btn-primary btn-sm">Shop Now</a></p>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- Include the footer fragment -->
+        <div th:replace="~{layout/footer :: footer}"></div>
+
+    </div>
+
+    <!-- Nhúng file modals.html -->
+    <div th:replace="~{layout/modals}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+    <!-- MDB -->
+    <script type="text/javascript" src="js/mdb.min.js"></script>
+
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/jquery-ui.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/aos.js"></script>
+
+    <script src="js/main.js"></script>
+
+
+    <script src="js/user/auth.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+
+    <script th:if="${not #strings.isEmpty(errMsg)}">
+        $(document).ready(function () {
+
+            Swal.fire("Thất Bại", "${errMsg}", "error");
+        });
+    </script>
+
+    <script>
+
+        $(document).ready(function () {
+            $(document).on('click', '.btn-add-cart', function (e) {
+                let btn = e.target;
+                let id = btn.dataset.id;
+                const formData = new FormData();
+                formData.append("id", id);
+                formData.append("quantity", 1);
+                fetch('/cart/add', {
+                    method: 'POST',
+                    body: formData
+                }).then(response => response.json())
+                    .then(data => {
+                        if (data.code === 0) {
+                            Swal.fire("Thành Công", data.message, "success");
+                            console.log(data.sizeCart);
+                            $(".count").text(data.sizeCart);
+                        } else {
+                            Swal.fire("Thất Bại", data.message, "error");
+                        }
+                        console.log(data);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            });
+        });
+
+    </script>
+
+
+</body>
+
+</html>

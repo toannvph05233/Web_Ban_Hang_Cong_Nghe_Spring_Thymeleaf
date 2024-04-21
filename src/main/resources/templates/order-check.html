@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Kiểm tra đơn hàng</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+  <link rel="stylesheet" href="../fonts/icomoon/style.css">
+
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/magnific-popup.css">
+  <link rel="stylesheet" href="../css/jquery-ui.css">
+  <link rel="stylesheet" href="../css/owl.carousel.min.css">
+  <link rel="stylesheet" href="../css/owl.theme.default.min.css">
+
+
+  <link rel="stylesheet" href="../css/aos.css">
+
+  <link rel="stylesheet" href="../css/style.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <!-- Google Fonts Roboto -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
+  <!-- MDB -->
+  <link rel="stylesheet" href="../css/mdb.min.css" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+  <style>
+    .table-container {
+      max-height: 580px;
+      overflow-y: auto;
+    }
+
+    .table-container thead {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="site-wrap">
+    <!-- Include the header fragment -->
+    <div th:replace="~{layout/header :: header}"></div>
+
+    <div class="bg-light py-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 mb-0"><a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong
+              class="text-black">Kiểm tra đơn hàng đã đặt</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container rounded bg-light">
+
+      <div class="table-responsive table-container">
+        <table class="table table-hover">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Trạng thái</th>
+              <th scope="col">Tạo lúc</th>
+              <th scope="col">Tổng tiền</th>
+              <th scope="col">Hoạt động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="order : ${orders}">
+              <th scope="row"><a th:href="@{/cart/order-detail/__${order.id}__}"
+                  th:text="${order.id} + ' (Xem chi tiết)'"></a></th>
+              <td th:text="${order.status}"></td>
+              <td th:text="${order.create_at}"></td>
+              <td th:text="${#numbers.formatDecimal(order.total, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>
+              <td>
+                <button th:data-id="${order.id}" th:if="${order.status == 'Đang giao'}"
+                  class="btn btn-sm btn-outline-primary btn-received"><i class="fa-brands fa-get-pocket"></i></button>
+                <button th:data-id="${order.id}"
+                  th:unless="${order.status == 'Đã hủy' or order.status == 'Đã giao' or order.status == 'Đang giao'}"
+                  class="btn btn-sm btn-outline-danger btn-cancel"><i class="fa fa-xmark-circle"></i></button>
+                <a th:if="${order.status == 'Đã giao' and order.isReview == false}" class="btn btn-sm btn-outline-warning" th:href="@{/cart/review/__${order.id}__}">
+                  Đánh giá
+                </a>
+                <button th:if="${order.status == 'Đã giao' and order.isReview == true}" class="btn btn-sm btn-outline-success" th:href="@{/cart/review/__${order.id}__}">
+                  Đã đánh giá
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+
+    <!-- Include the footer fragment -->
+    <div th:replace="~{layout/footer :: footer}"></div>
+  </div>
+  <!-- Nhúng file modals.html -->
+  <div th:replace="~{layout/modals}"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+  <!-- MDB -->
+  <script type="text/javascript" src="../js/mdb.min.js"></script>
+
+  <script src="../js/jquery-3.3.1.min.js"></script>
+  <script src="../js/jquery-ui.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/owl.carousel.min.js"></script>
+  <script src="../js/jquery.magnific-popup.min.js"></script>
+  <script src="../js/aos.js"></script>
+
+  <script src="../js/main.js"></script>
+
+
+  <script src="../js/user/auth.js"></script>
+
+  <script type="text/javascript">
+    function myFunction(id, status) {
+      let data = {
+        id: id,
+        status: status
+      }
+      fetch('/order', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(res => res.json())
+        .then(json => {
+          console.log('client', json);
+          if (json.code === 0) {
+            // Swal.fire("Thành Công", json.message, "success");
+            setTimeout(function () {
+              location.href = "";
+            }, 1000);
+          } else {
+            console.log('client', json)
+            // Swal.fire("Thất Bại", json.message, "error");
+          }
+        })
+        .catch(console.log)
+    }
+
+    $('.btn-received').click(e => {
+      let btn = e.target
+      let id = btn.dataset.id
+      myFunction(id, 'Đã giao');
+
+    })
+
+    $('.btn-cancel').click(e => {
+      let btn = e.target
+      let id = btn.dataset.id
+      myFunction(id, 'Đã hủy');
+      setTimeout(function () {
+        location.href = "";
+      }, 1000);
+    })
+
+  </script>
+
+</body>
+
+</html>

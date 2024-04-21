@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>BHHT</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+    <link rel="stylesheet" href="fonts/icomoon/style.css">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/jquery-ui.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+
+
+    <link rel="stylesheet" href="css/aos.css">
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
+    <!-- MDB -->
+    <link rel="stylesheet" href="css/mdb.min.css" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+
+    <style>
+        .add-to-cart {
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .product:hover .add-to-cart {
+            opacity: 1;
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+    <div class="site-wrap">
+
+        <!-- Include the header fragment -->
+        <div th:replace="~{layout/header :: header}"></div>
+        <div class="bg-light py-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 mb-0"><a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong
+                            th:text="${category.name}" class="text-black"></strong></div>
+                </div>
+            </div>
+        </div>
+        <div class="site-section block-3 site-blocks-2 bg-light">
+            <div class="container">
+
+                <hr class="hr" />
+                <div class="row">
+                    <div th:each="product : ${products}" class="col-md-3 product-item product">
+                        <div class="card mb-4 product-grid">
+
+                            <a th:href="@{/product-detail/__${product.id}__}">
+                                <div class="card-img" style="height: 306px;"><img data-toggle="tooltip"
+                                        th:title="${product.name}"
+                                        style="padding-top: 50px; padding-left: 25px; padding-right: 25px;"
+                                        th:src="@{/img/product/__${product.id}__/__${product.image}__}"
+                                        class="card-img-top" alt="Product Image"></div>
+                            </a>
+                            <div class="card-body text-center">
+                                <a th:href="@{/product-detail/__${product.id}__}">
+                                    <h5 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                        data-toggle="tooltip" th:title="${product.name}" th:text="${product.name}"></h5>
+                                </a>
+
+                                <p class="mb-0" th:text="@{Còn __${product.quantity}__ sản phẩm}"></p>
+                                <p th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' ₫'"
+                                    class="text-danger font-weight-bold"></p>
+                                <button class="btn btn-success btn-lg add-to-cart btn-add-cart"
+                                    th:data-id="${product.id}">Add to Cart</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- Display Bootstrap pagination -->
+                <ul class="pagination">
+                    <li th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">
+                        <a class="page-link" th:href="'/category=' + ${category.id} + '?' + 'page=0'"
+                            th:text="'First'"></a>
+                    </li>
+                    <li th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">
+                        <a class="page-link" th:href="'/category=' + ${category.id} + '?' + 'page='+${currentPage-1}"
+                            th:text="'Previous'"></a>
+                    </li>
+                    <li th:class="${currentPage + 1 >= totalPages} ? 'page-item disabled' : 'page-item'">
+                        <a class="page-link" th:href="'/category=' + ${category.id} + '?' + 'page='+${currentPage+1}"
+                            th:text="'Next'"></a>
+                    </li>
+                    <li th:class="${currentPage + 1 >= totalPages} ? 'page-item disabled' : 'page-item'">
+                        <a class="page-link" th:href="'/category=' + ${category.id} + '?' + 'page='+${totalPages-1}"
+                            th:text="'Last'"></a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+        <!-- Include the footer fragment -->
+        <div th:replace="~{layout/footer :: footer}"></div>
+
+    </div>
+
+    <!-- Nhúng file modals.html -->
+    <div th:replace="~{layout/modals}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+    <!-- MDB -->
+    <script type="text/javascript" src="js/mdb.min.js"></script>
+
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/jquery-ui.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/aos.js"></script>
+
+    <script src="js/main.js"></script>
+
+
+    <script src="js/user/auth.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+
+    <script th:if="${not #strings.isEmpty(errMsg)}">
+        $(document).ready(function () {
+
+            Swal.fire("Thất Bại", "${errMsg}", "error");
+        });
+    </script>
+
+    <script>
+
+        $(document).ready(function () {
+            $(document).on('click', '.btn-add-cart', function (e) {
+                let btn = e.target;
+                let id = btn.dataset.id;
+                const formData = new FormData();
+                formData.append("id", id);
+                formData.append("quantity", 1);
+                fetch('/cart/add', {
+                    method: 'POST',
+                    body: formData
+                }).then(response => response.json())
+                    .then(data => {
+                        if (data.code === 0) {
+                            Swal.fire("Thành Công", data.message, "success");
+                            console.log(data.sizeCart);
+                            $(".count").text(data.sizeCart);
+                        } else {
+                            Swal.fire("Thất Bại", data.message, "error");
+                        }
+                        console.log(data);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            });
+        });
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dynamic HTML Email</title>
+
+</head>
+<style>
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .card {
+        background-color: #f8f9fa;
+        margin-bottom: 20px;
+        padding: 20px;
+    }
+
+    .card-header {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px;
+        text-align: center;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    th,
+    td {
+        border: 1px solid #dee2e6;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f8f9fa;
+    }
+
+    footer {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .table-container {
+        width: 700px;
+        /* Đặt chiều rộng 100% */
+        /* Các kiểu CSS khác */
+    }
+</style>
+
+<body>
+
+    <div class="container">
+        <div class="table-container">
+            <p>Trong cuộc sống có quá nhiều sự lựa chọn cảm ơn [[${message}]] đã chọn <span>Zmobile</span>.</p>
+            <p><span>Zmobile</span> rất vui thông báo đơn hàng <b th:text="@{#__${order.id}__}"></b> của quý khách đã
+                được tiếp
+                nhận và đang trong quá trình giao hàng.</p>
+        </div>
+
+        <div class="row">
+            <div class="card bg-light mb-3 table-container">
+                <div class="card-header">
+                    <b th:text="@{Thông tin đơn hàng #__${order.id}__}"></b>
+                </div>
+                <div class="card-body">
+                    <table>
+                        <tr>
+                            <th>Thông tin tài khoản</th>
+                            <th>Địa chỉ giao hàng</th>
+                        </tr>
+                        <tr>
+                            <td th:text="@{Tên khách hàng: __${order.userId.name}__}">Alfreds Futterkiste</td>
+                            <td th:text="@{Tên người nhận: __${order.name}__}">Maria Anders</td>
+                        </tr>
+                        <tr>
+                            <td th:text="@{Email: __${order.userId.email}__}">Alfreds Futterkiste</td>
+                            <td th:text="@{Email: __${order.userId.email}__}">Maria Anders</td>
+                        </tr>
+                        <tr>
+                            <td th:text="@{Số điện thoại: __${order.phone}__}">Alfreds Futterkiste</td>
+                            <td th:text="@{Số điện thoại: __${order.phone}__}">Maria Anders</td>
+                        </tr>
+                        <tr>
+                            <td th:text="@{Địa chỉ: __${order.address}__}"></td>
+                            <td th:text="@{Tên người nhận: __${order.name}__}">Maria Anders</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><b>Phương thức thanh toán: </b> <p th:text="${order.payment_method}">Thanh toán khi nhận hàng (COD)</p></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <p>Và dưới đây là chi tiết đơn hàng của quý khách:</p>
+        <div class="row">
+            <div class="card border-primary mb-3 table-container">
+                <div class="card-header"><b>CHI TIẾT ĐƠN HÀNG</b></div>
+                <div class="card-body">
+                    <table class="table-bordered">
+                        <thead>
+                            <tr class="table-success">
+                                <th scope="col">Tên sản phẩm</th>
+                                <th scope="col">SL</th>
+                                <th scope="col">Giá bán</th>
+                                <th scope="col">Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="orderItem : ${orderItems}" class="table-secondary">
+                                <td th:text="${orderItem.product.name}">Áo Nỉ oversize 84RISING - FREEDOM LOGO
+                                    CALIGRAPHY</td>
+                                <td th:text="${orderItem.quantity}">1</td>
+                                <td
+                                    th:text="${#numbers.formatDecimal(orderItem.purchase_price, 0, 'COMMA', 0, 'POINT')} + ' ₫'">
+                                    319.000đ</td>
+                                <td
+                                    th:text="${#numbers.formatDecimal(orderItem.purchase_price, 0, 'COMMA', 0, 'POINT')} + ' ₫'">
+                                    319.000đ</td>
+                            </tr>
+                            <tr class="table-secondary">
+                                <td colspan="3">Mã giảm giá</td>
+                                <td>NU204RA7VHG</td>
+                            </tr>
+                            <tr class="table-secondary">
+                                <td colspan="3">Tổng giá trị sản phẩm</td>
+                                <td th:text="${#numbers.formatDecimal(order.total, 0, 'COMMA', 0, 'POINT')} + ' ₫'">
+                                    319.000đ</td>
+                            </tr>
+                            <tr class="table-secondary">
+                                <td colspan="3">Voucher</td>
+                                <td>0đ</td>
+                            </tr>
+                            <tr class="table-secondary">
+                                <td colspan="3">Phí vận chuyển</td>
+                                <td>0đ</td>
+                            </tr>
+                            <tr class="table-secondary">
+                                <td colspan="3">Tổng thanh toán</td>
+                                <td th:text="${#numbers.formatDecimal(order.total, 0, 'COMMA', 0, 'POINT')} + ' ₫'">
+                                    219.000đ</td>
+                            </tr>
+                            <tr class="table-secondary">
+                                <td colspan="3">Hình thức thanh toán</td>
+                                <td>Thanh toán khi nhận hàng (COD)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <p>Quý khách cần được hỗ trợ ngay?</p>
+                    <p>Chỉ cần phản hồi đến <a href="mailto:khanhungvy@gmail.com">khanhungvy@gmail.com</a>, hoặc gọi số
+                        điện thoại 0333091697 hoặc inbox trực tiếp cho Zmobile tại đây (8-21h cả T7, CN).</p>
+                    <p>Quý khách hàng có thể tham khảo thêm chính sách bảo mật thông tin cá nhân và chính sách đổi trả
+                        hàng.</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            Hotline: 0333 091 697 | CSKH: khanhungvy@gmail.com<br>
+            Zmobile - Uy tín chất lượng<br>
+            Điện thoại | Laptop | Smartwatch
+        </footer>
+    </div>
+
+
+
+
+</body>
+
+</html>

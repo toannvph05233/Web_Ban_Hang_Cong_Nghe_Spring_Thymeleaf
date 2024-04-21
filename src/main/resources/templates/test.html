@@ -1,0 +1,2 @@
+<option value="">Tất cả</option>
+                            <option th:each="brand : ${session.brands}" th:value="${brand.id}" th:text="${brand.name}">apple</option>

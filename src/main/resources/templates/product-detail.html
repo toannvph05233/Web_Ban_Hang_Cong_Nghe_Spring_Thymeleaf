@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Chi tiết sản phẩm</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+  <link rel="stylesheet" href="../fonts/icomoon/style.css">
+
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/magnific-popup.css">
+  <link rel="stylesheet" href="../css/jquery-ui.css">
+  <link rel="stylesheet" href="../css/owl.carousel.min.css">
+  <link rel="stylesheet" href="../css/owl.theme.default.min.css">
+
+
+  <link rel="stylesheet" href="../css/aos.css">
+
+  <link rel="stylesheet" href="../css/style.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <!-- Google Fonts Roboto -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
+  <!-- MDB -->
+  <link rel="stylesheet" href="../css/mdb.min.css" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+
+  <style>
+    .rating .star {
+        cursor: pointer;
+        padding: 5px;
+    }
+
+    .rating .star:before {
+        content: "\2606";
+        font-size: 30px;
+        color: #ccc;
+    }
+
+    .rating .star:hover:before,
+    .rating .star.selected:before {
+        content: "\2605";
+        color: gold;
+    }
+</style>
+</head>
+
+<body>
+  <div class="site-wrap">
+    <!-- Include the header fragment -->
+    <div th:replace="~{layout/header :: header}"></div>
+
+    <div class="bg-light py-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 mb-0"><a href="/">Home</a> <span class="mx-2 mb-0">/</span> <strong
+              th:text="${product.name}" class="text-black">Tank Top T-Shirt</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <img th:src="@{../img/__${product.image}__}" alt="Image" class="img-fluid img-thumbnail">
+          </div>
+          <div class="col-md-6">
+            <form id="item-form">
+              <h2 th:text="${product.name}" class="text-black">Tank Top T-Shirt</h2>
+              <!-- <h5 th:text="'Color:' + ${product.color}" class="mb-4"></h5> -->
+              <!-- <button type="button" th:text="${product.color}" class="btn"></button> -->
+              <p class="mb-4" th:text="${product.description}"></p>
+              <h3><span th:text="${product.color.name}" class="badge badge-secondary">New</span></h3>
+              <!-- <p th:text="${product.description}" class="mb-4"></p> -->
+              <p><strong th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' ₫'"
+                  class="text-primary h4">0 ₫</strong></p>
+
+              <div class="mb-5">
+                <div class="input-group mb-3" style="max-width: 170px;">
+                  <div class="input-group-prepend">
+                    <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
+                  </div>
+                  <input name="quantity" type="text" class="form-control text-center" value="1" placeholder=""
+                    aria-label="Example text with button addon" aria-describedby="button-addon1"
+                    th:max="${product.quantity}">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
+                  </div>
+                </div>
+
+              </div>
+              <button type="button" id="btn-add-cart" class="buy-now btn btn-lg btn-primary"
+                th:data-id="${product.id}">Thêm giỏ
+                hàng</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section block-3 site-blocks-2 bg-light">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-7 site-section-heading text-center pt-4">
+            <h2>Sản phẩm nổi bật</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="nonloop-block-3 owl-carousel">
+              <div th:each="product : ${session.products}" class="item">
+                <div class="block-4 text-center">
+                  <figure class="block-4-image" style="padding-top: 50px; padding-left: 25px; padding-right: 25px;">
+                    <img th:src="@{/img/product/__${product.id}__/__${product.image}__}" alt="Image placeholder"
+                      class="img-fluid">
+                  </figure>
+                  <div class="block-4-text p-4">
+                    <h3><a th:text="${product.name}" href="#">Tank Top</a></h3>
+                    <p class="mb-0" th:text="@{Còn __${product.quantity}__ sản phẩm}"></p>
+                    <p th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' ₫'"
+                      class="text-danger font-weight-bold"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section">
+      <div class="container">
+        <div class="card">
+          <div class="card-header">Đánh giá sản phẩm</div>
+          <ul class="list-group list-group-flush">
+            <li th:each="review : ${reviews}" class="list-group-item">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 th:text="${review.user.name}" class="mb-1">Người dùng 1</h5>
+                <small th:text="${review.create_at}">Ngày đánh giá</small>
+              </div>
+              <div th:if="${review.rating == 1}" class="rating">
+                <span class="star selected"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+              </div>
+              <div th:if="${review.rating == 2}" class="rating">
+                <span class="star selected"></span>
+                <span class="star selected"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+              </div>
+              <div th:if="${review.rating == 3}" class="rating">
+                <span class="star selected"></span>
+                <span class="star selected"></span>
+                <span class="star selected"></span>
+                <span class="star"></span>
+                <span class="star"></span>
+              </div>
+              <div th:if="${review.rating == 4}" class="rating">
+                <span class="star selected"></span>
+                <span class="star selected"></span>
+                <span class="star selected"></span>
+                <span class="star selected"></span>
+                <span class="star"></span>
+              </div>
+              <div th:if="${review.rating == 5}" class="rating">
+                <span class="star selected"></span>
+                <span class="star selected"></span>
+                <span class="star selected"></span>
+                <span class="star selected"></span>
+                <span class="star selected"></span>
+              </div>
+              <p th:text="${review.comment}" class="mb-1">Nội dung đánh giá của người dùng 1.</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Include the footer fragment -->
+    <div th:replace="~{layout/footer :: footer}"></div>
+  </div>
+  <!-- Nhúng file modals.html -->
+  <div th:replace="~{layout/modals}"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+  <!-- MDB -->
+  <script type="text/javascript" src="../js/mdb.min.js"></script>
+
+  <script src="../js/jquery-3.3.1.min.js"></script>
+  <script src="../js/jquery-ui.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/owl.carousel.min.js"></script>
+  <script src="../js/jquery.magnific-popup.min.js"></script>
+  <script src="../js/aos.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/user/auth.js"></script>
+
+  <script>
+    $('#btn-add-cart').click(e => {
+      let btn = e.target
+      let id = btn.dataset.id
+      const formData = new FormData(document.getElementById('item-form'));
+      formData.append("id", id)
+      fetch('/cart/add', {
+        method: 'POST',
+        body: formData
+      }).then(response => response.json())
+        .then(data => {
+          // Xử lý kết quả từ server (nếu cần)
+          if (data.code === 0) {
+            Swal.fire("Thành Công", data.message, "success");
+            setTimeout(function () {
+              location.href = "/cart";
+            }, 1500);
+          } else {
+            Swal.fire("Thất Bại", data.message, "error");
+          }
+          console.log(data);
+        })
+        .catch(error => {
+          // Xử lý lỗi (nếu có)
+          console.error(error);
+        });
+    })
+  </script>
+
+
+</body>
+
+</html>

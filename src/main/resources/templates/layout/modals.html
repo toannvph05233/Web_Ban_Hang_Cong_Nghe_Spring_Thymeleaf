@@ -1,0 +1,157 @@
+<!-- Modal login -->
+<div class="modal fade" id="staticBackdrop1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true"
+    style="z-index: 4000;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content w-75">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Đăng nhập</h5>
+                <button type="button" class="btn-close" aria-label="Close" data-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="login-form">
+                    <!-- Email input -->
+                    <div class="form-outline mb-4">
+                        <input type="email" id="email" name="email" class="form-control" />
+                        <label class="form-label" for="email1">Email address</label>
+                    </div>
+
+                    <!-- password input -->
+                    <div class="form-outline mb-4">
+                        <input type="password" id="password" name="password" class="form-control" />
+                        <label class="form-label" for="password1">Password</label>
+                    </div>
+
+                    <div class="form-group">
+                        <a href="/forgot-password">Quên mật khẩu</a>
+                    </div>
+
+                    <!-- Submit button -->
+                    <button type="button" id="btn-login-confirmed" class="btn btn-primary btn-block"
+                        data-dismiss="modal">Login</button>
+                </form>
+                <hr>
+                <div class="alert alert-info">
+                    Bạn chưa có tài khoản? <a href="/register">Đăng ký</a> ngay hôm nay!
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Modal login -->
+
+<!-- Model register -->
+<div class="modal fade" id="staticBackdrop2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true"
+    style="z-index: 4000;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content w-75">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">Đăng ký</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="register-form">
+                    <!-- Name input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" name="name" id="name2" class="form-control" />
+                        <label class="form-label" for="name2">Name</label>
+                    </div>
+
+                    <!-- Gender input -->
+                    <div class="form-outline mb-4">
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input value="nam" name="gender" type="radio" id="gender-male" class="custom-control-input"
+                                checked>
+                            <label for="gender-male" class="custom-control-label">nam</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input value="nữ" name="gender" type="radio" id="gender-female"
+                                class="custom-control-input">
+                            <label for="gender-female" class="custom-control-label">nữ</label>
+                        </div>
+                    </div>
+
+                    <!-- Email input -->
+                    <div class="form-outline mb-4">
+                        <input type="email" name="email" id="email2" class="form-control" />
+                        <label class="form-label" for="email2">Email address</label>
+                    </div>
+
+                    <!-- password input -->
+                    <div class="form-outline mb-4">
+                        <input type="password" name="password" id="password2" class="form-control" />
+                        <label class="form-label" for="password2">Password</label>
+                    </div>
+
+                    <!-- Submit button -->
+                    <button type="button" id="btn-register-confirmed" class="btn btn-primary btn-block"
+                        data-dismiss="modal">Sign
+                        up</button>
+                </form>
+                <hr>
+                <div class="alert alert-info">
+                    Bạn đã có tài khoản? <a href="/login">Đăng nhập</a> ngay!
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Model end register -->
+
+<!-- Model cart -->
+<div class="modal fade" id="dathang" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true"
+    style="z-index: 4000;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content w-80">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">Thông tin đặt hàng</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="checkout-form" th:action="@{/submitOrder}" method="post">
+                    <!-- Name input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" name="name" id="name" class="form-control" />
+                        <label class="form-label" for="name">Tên người nhận</label>
+                    </div>
+                    <!-- Email input -->
+                    <div class="form-outline mb-4">
+                        <input type="text" name="phone" id="phone" class="form-control" maxlength="11" />
+                        <label class="form-label" for="phone">Số điện thoại</label>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <input type="text" name="streetname" id="streetname" class="form-control" />
+                        <label class="form-label" for="streetname">Tên đường, Tòa nhà, Số nhà.</label>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <select class="form-select" id="city" name="city">
+                            <option value="" disabled selected>Chọn tỉnh thành</option>
+                        </select>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <select class="form-select" id="district" name="district">
+                            <option value="" disabled selected>Chọn quận huyện</option>
+                        </select>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <select class="form-select" id="ward" name="ward">
+                            <option value="" disabled selected>Chọn phường xã</option>
+                        </select>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <select class="form-select" name="gw">
+                            <option value="onepay">Onepay</option>
+                            <option selected value="vnpay">VNPay</option>
+                        </select>
+                    </div>
+
+                    <!-- Submit button -->
+                    <button type="button" id="btn-checkout-confirmed" class="btn btn-primary btn-block"
+                        data-dismiss="modal">Thanh toán khi nhận hàng</button>
+                    <button type="submit" id="btn-vnpay-confirmed" class="btn btn-primary btn-block">Thanh toán
+                        qua</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Model end cart -->
