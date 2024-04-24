@@ -22,6 +22,7 @@ import java.util.*;
 public class VNPayService implements IPaymentAdapter{
     @Autowired
     VNPayRepository vnPayRepository;
+
     private PaymentAdapter paymentAdapter;
     public VNPayService(PaymentAdapter paymentAdapter){
         this.paymentAdapter = paymentAdapter;

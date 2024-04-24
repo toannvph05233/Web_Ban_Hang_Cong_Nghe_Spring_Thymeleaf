@@ -9,7 +9,7 @@ import com.bienvan.store.model.Order;
 public class GmailEmailService extends EmailService {
 
     @Override
-    protected String prepareContent(Order order) {
+    public String prepareContent(Order order) {
         StringBuilder content = new StringBuilder();
         content.append("Dear ").append(order.getUserId()).append(",<br><br>");
         content.append("Your order has been processed successfully.<br>");

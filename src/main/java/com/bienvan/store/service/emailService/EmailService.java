@@ -42,7 +42,7 @@ public abstract class EmailService {
         }
     }
 
-    protected abstract String prepareContent(Order order);
+    public abstract String prepareContent(Order order);
 
     public void sendDynamicHtmlEmail(String to, String subject, Order order) throws MessagingException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();

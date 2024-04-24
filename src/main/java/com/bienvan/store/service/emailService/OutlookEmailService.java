@@ -9,7 +9,7 @@ import com.bienvan.store.model.Order;
 public class OutlookEmailService extends EmailService {
 
     @Override
-    protected String prepareContent(Order order) {
+    public String prepareContent(Order order) {
         StringBuilder content = new StringBuilder();
         content.append("Hi ").append(order.getUserId()).append(",\n\n");
         content.append("Your order has been successfully processed.\n");

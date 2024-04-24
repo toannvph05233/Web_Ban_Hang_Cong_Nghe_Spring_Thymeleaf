@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import com.bienvan.store.decoratorPattern.BasicPasswordStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -44,7 +45,7 @@ public class UserController {
     RoleService roleService;
 
     @Autowired
-    BCryptPasswordEncoder passwordEncoder;
+    BasicPasswordStorageService basicPasswordStorageService;
 
     @GetMapping // get all user
     public ResponseEntity<?> getListUser() {
@@ -74,8 +75,8 @@ public class UserController {
 
         User checkUser = userService.findByEmail(user.getEmail());
         if (checkUser == null) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
             User newUser = userService.createUser(user);
+            basicPasswordStorageService.changePassword(user.getPassword(), newUser.getId());
             return ResponseEntity.ok(new MessageResponse(0, "Add user successfully", newUser));
         }
         return ResponseEntity.ok(new MessageResponse(1, "Email đã tồn tại", null));
@@ -147,17 +148,13 @@ public class UserController {
         }
         User checkUser = userService.findByEmail(user.getEmail());
         if (checkUser == null) {
-
-            String encodePW = passwordEncoder.encode(user.getPassword());
-            user.setPassword(encodePW);
-
             Role role = roleService.findByName(ERole.ROLE_USER).get();
             Set<Role> listRoles = new HashSet<Role>();
 
             listRoles.add(role);
             user.setUserRoles(listRoles);
             User newUser = userService.createUser(user);
-
+            basicPasswordStorageService.changePassword(user.getPassword(), newUser.getId());
             for (Role r : listRoles) {
                 session.setAttribute(r.getName().toString(), r.getName().toString());
             }

@@ -35,9 +35,6 @@ public class PaymentController {
     public static String address;
 
     @Autowired
-    private VNPayService vnPayService;
-
-    @Autowired
     private OnePayService o;
 
     @Autowired
